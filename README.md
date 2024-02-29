@@ -1,2 +1,2 @@
-# Crowd-Density-Management-Node-Simulator
+# CDM node simulator
 Generates real-time testing data for the CDM server
