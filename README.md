@@ -10,4 +10,4 @@ Run it with:
 deno run simulate.ts
 ```
 
-Change configruation in `config.ts`.
+Change configuration in `config.ts`.
