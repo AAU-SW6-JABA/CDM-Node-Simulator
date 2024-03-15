@@ -6,7 +6,7 @@ const ZodRandomizer = z.object({
 	/**
 	 * By how many percent can the output value deviate from the input value?
 	 */
-	maxDeviance: ZodNumber.optional().default(0),
+	maxDeviance: ZodNumber.optional().default(15),
 
 	/**
 	 * Defines the normal distribution of deviations in the measurements.
