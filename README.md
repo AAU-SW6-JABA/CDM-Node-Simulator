@@ -2,7 +2,7 @@
 
 Generates real-time testing data for the CDM server.
 
-To run this, you must have deno installed: https://deno.com/
+To run this, you must have Deno installed: https://deno.com/
 
 Run it with:
 

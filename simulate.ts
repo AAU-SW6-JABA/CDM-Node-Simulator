@@ -13,10 +13,12 @@ const persons = structuredClone(config.persons);
 tick();
 function tick() {
 	for (const person of persons) {
+
+		const Δtime = config.poll.interval / 1000; //Time is in meter pr second.
 		// Move the person
 		const Δposition = directionToXY(
 			person.direction.bearing,
-			person.direction.speed,
+			person.direction.speed * Δtime, //speed in m/s times poll update in seconds.
 		);
 		person.position[0] += Δposition[0];
 		person.position[1] += Δposition[1];
