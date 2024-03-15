@@ -31,8 +31,7 @@ function tick() {
 				reportLog(
 					await hashContent(person.imsi),
 					antenna.id,
-					randomize(distanceToSignalStrength(distance), person.signalStrength),
-					distance
+					randomize(distanceToSignalStrength(distance), person.signalStrength)
 				);
 			}, randomize(config.poll.interval / 2, config.poll.deviance));
 		}
@@ -97,13 +96,11 @@ function reportLog(
 	imsiHash: string,
 	antennaId: number,
 	signalStrength: number,
-	distance: number,
 ): void {
 	console.log(
 		imsiHash,
 		antennaId,
 		Date.now(),
 		signalStrength,
-		distance + " Meters",
 	);
 }
