@@ -23,7 +23,7 @@ export default defineConfig({
 		{
 			direction: {
 				bearing: 270,
-				speed: 1,
+				speed: 1, // Meters pr. Second.
 			},
 			position: [0, 150],
 		},
