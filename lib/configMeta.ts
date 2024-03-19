@@ -1,4 +1,4 @@
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { z } from "zod";
 
 export const ZodNumber = z.number().safe();
 
@@ -47,6 +47,8 @@ const ZodDirection = z.object({
 	speed: ZodNumber.optional().default(0),
 });
 
+export type Direction = z.infer<typeof ZodDirection>;
+
 const ZodPersonConfig = z.object({
 	/**
 	 * The IMSI number for the person's phone.
@@ -69,17 +71,16 @@ const ZodPersonConfig = z.object({
 	direction: ZodDirection.optional().default({}),
 });
 
-const ZodAntennaConfig = z.object({
-	/**
-	 * The ID to use when sending antenna data to the database.
-	 */
-	id: ZodNumber.nonnegative(),
+export type PersonConfig = z.infer<typeof ZodPersonConfig>;
 
+const ZodAntennaConfig = z.object({
 	/**
 	 * The position of the antenna.
 	 */
 	position: ZodPosition,
 });
+
+export type AntennaConfig = z.infer<typeof ZodAntennaConfig>;
 
 const ZodPollConfig = z.object({
 	/**
@@ -92,6 +93,8 @@ const ZodPollConfig = z.object({
 	 */
 	deviance: ZodRandomizer.optional().default({}),
 });
+
+export type PollConfig = z.infer<typeof ZodPollConfig>;
 
 /**
  * The full configuration of the simulator.

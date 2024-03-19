@@ -1,5 +1,16 @@
 {
 	"fmt": {
 		"useTabs": true
+	},
+	"tasks": {
+		"setup:proto-types": "deno run --allow-env --allow-read --allow-write npm:@grpc/proto-loader@0.7.10/proto-loader-gen-types --grpcLib=npm:@grpc/grpc-js --outDir=gen/protobuf CDM-ProtocolBuffer/route_guide.proto",
+		"setup": "deno task build:proto-types"
+	},
+	"imports": {
+		"@grpc/proto-loader": "npm:@grpc/proto-loader",
+		"proto-loader": "npm:@grpc/proto-loader",
+		"grpc-js": "npm:@grpc/grpc-js@1.10.2",
+		"dotenv": "https://deno.land/std@0.220.0/dotenv/mod.ts",
+		"zod": "https://deno.land/x/zod@v3.22.4/mod.ts"
 	}
 }

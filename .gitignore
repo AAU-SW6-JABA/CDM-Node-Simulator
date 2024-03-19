@@ -1,3 +1,7 @@
+
+# Generated files
+gen/**/*
+
 #Apple crap
 .DS_Store
 
