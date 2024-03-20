@@ -73,7 +73,7 @@ function tick() {
 		person.position[0] += deltaPosition[0];
 		person.position[1] += deltaPosition[1];
 
-		// Log the person's position on all antennas
+		// Log the person's position on all antennas in range
 		for (const antenna of antennas) {
 			if (!antenna.id) return;
 			const distance = getDistance(person.position, antenna.position);
