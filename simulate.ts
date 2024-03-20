@@ -2,27 +2,29 @@ import type {
 	AntennaConfig,
 	PersonConfig,
 	Position,
-} from "./lib/configMeta.ts";
-import config from "./config.ts";
-import { randomize } from "./lib/randomDistribution.ts";
+} from "./lib/configMeta.js";
+import config from "./config.js";
+import { randomize } from "./lib/randomDistribution.js";
 
-import type { ProtoGrpcType } from "./gen/protobuf/cdm_protobuf.ts";
-import protoLoader from "proto-loader";
-import grpc from "grpc-js";
+import type { ProtoGrpcType } from "./gen/protobuf/cdm_protobuf.js";
+import protoLoader from "@grpc/proto-loader";
+import grpc from "@grpc/grpc-js";
 
-import { load as loadEnv } from "dotenv";
+import dotenv from "dotenv";
 
-const env = await loadEnv();
-if(typeof env?.PORT !== "string") throw new TypeError("Please define a port in your env file (PORT)");
+dotenv.config();
+if (typeof process.env?.PORT !== "string") {
+	throw new TypeError("Please define a port in your env file (PORT)");
+}
 
 const protoDefinitionPath = "./CDM-ProtocolBuffer/cdm_protobuf.proto";
 
 const packageDefinition = await protoLoader.load(protoDefinitionPath, {});
-const packageObject =
-	(grpc.loadPackageDefinition(packageDefinition) as unknown as ProtoGrpcType)
-		.cdm_protobuf;
+const packageObject = (
+	grpc.loadPackageDefinition(packageDefinition) as unknown as ProtoGrpcType
+).cdm_protobuf;
 const client = new packageObject.Routes(
-	`localhost:${env.PORT}`,
+	`localhost:${process.env.PORT}`,
 	grpc.credentials.createInsecure(),
 );
 
@@ -47,18 +49,24 @@ for (const antenna of antennas) {
 	registerAntenna(antenna);
 }
 function registerAntenna(antenna: Antenna): void {
-	client.registerAntennaRoute({
-		x: antenna.position[0],
-		y: antenna.position[1],
-	}, (error, value) => {
-		if (!value?.aid || error) {
-			console.warn("Could not register antenna, retrying in one second", error);
-			setTimeout(registerAntenna, 1000, antenna);
-			return;
-		} else {
-			antenna.id = value.aid;
-		}
-	});
+	client.registerAntennaRoute(
+		{
+			x: antenna.position[0],
+			y: antenna.position[1],
+		},
+		(error, value) => {
+			if (!value?.aid || error) {
+				console.warn(
+					"Could not register antenna, retrying in one second",
+					error,
+				);
+				setTimeout(registerAntenna, 1000, antenna);
+				return;
+			} else {
+				antenna.id = value.aid;
+			}
+		},
+	);
 }
 
 tick();
@@ -156,10 +164,5 @@ function reportLog(
 	antennaId: number,
 	signalStrength: number,
 ): void {
-	console.log(
-		imsiHash,
-		antennaId,
-		Date.now(),
-		signalStrength,
-	);
+	console.log(imsiHash, antennaId, Date.now(), signalStrength);
 }

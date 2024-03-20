@@ -1,4 +1,4 @@
-import { Randomizer } from "./configMeta.ts";
+import { Randomizer } from "./configMeta.js";
 
 /**
  * Generates a random number between 0-1 that follows a bell curve distribution.
@@ -17,7 +17,8 @@ export function randomDistribution(curveAlpha: number): number {
 	while (u === 0) u = Math.random();
 	while (v === 0) v = Math.random();
 
-	const num = Math.sqrt(-curveAlpha * Math.log(u)) *
+	const num =
+		Math.sqrt(-curveAlpha * Math.log(u)) *
 		Math.cos(curveAlpha * Math.PI * v);
 	if (num < -5 || 5 < num) return randomDistribution(curveAlpha); // resample between 0 and 1
 	return num;

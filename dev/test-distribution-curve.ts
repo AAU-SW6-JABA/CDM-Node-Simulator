@@ -24,8 +24,8 @@ for (let i = 0; i < 100000; i++) {
 	const r = randomDistribution(alphaCurve);
 	const n = r > 0 ? Math.floor(r) : Math.ceil(r);
 	if (n === 0) {
-		results[4] += .5;
-		results[5] += .5;
+		results[4] += 0.5;
+		results[5] += 0.5;
 	} else {
 		results[n + 5] += 1;
 	}
