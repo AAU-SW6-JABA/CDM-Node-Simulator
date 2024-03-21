@@ -50,6 +50,7 @@ type Antenna = AntennaConfig & {
 
 const antennas: Antenna[] = structuredClone(config.antennas) as Antenna[];
 
+console.log("Registering antennas...");
 for (const antenna of antennas) {
 	registerAntenna(antenna);
 }
@@ -59,21 +60,22 @@ function registerAntenna(antenna: Antenna): void {
 			x: antenna.position[0],
 			y: antenna.position[1],
 		},
-		(error, value) => {
+		(error, value: { aid: number }) => {
 			if (!value?.aid || error) {
 				console.warn(
 					"Could not register antenna, retrying in one second",
 					error,
 				);
 				setTimeout(registerAntenna, 1000, antenna);
-				return;
 			} else {
+				console.log(`Succesfully registered antenna, id: ${value.aid}`);
 				antenna.id = value.aid;
 			}
 		},
 	);
 }
 
+console.log("Logging data...");
 tick();
 function tick() {
 	for (const person of persons) {
@@ -88,7 +90,7 @@ function tick() {
 
 		// Log the person's position on all antennas in range
 		for (const antenna of antennas) {
-			if (!antenna.id) return;
+			if (!antenna.id) continue;
 			const distance = getDistance(person.position, antenna.position);
 			if (!inRange(distance)) continue;
 			setTimeout(
@@ -170,5 +172,15 @@ function reportLog(
 	antennaId: number,
 	signalStrength: number,
 ): void {
-	console.log(imsiHash, antennaId, Date.now(), signalStrength);
+	client.logMeasurementRoute(
+		{
+			identifier: imsiHash,
+			timestamp: Date.now(),
+			aid: antennaId,
+			signalStrength,
+		},
+		(error) => {
+			if (error) console.error("Log error:", error);
+		},
+	);
 }

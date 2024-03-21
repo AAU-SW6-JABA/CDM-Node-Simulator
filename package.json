@@ -1,7 +1,7 @@
 {
 	"name": "cdm-node-simulator",
 	"version": "1.0.0",
-	"main": "index.js",
+	"main": "index.ts",
 	"type": "module",
 	"repository": "git@github.com:Jesper276/Crowd-Density-Management.git",
 	"author": "BaBrixx <bastian.b.hansen@gmail.com>",
@@ -26,7 +26,7 @@
 		"setup": "yarn setup:proto-types",
 		"format": "prettier -w .",
 		"lint": "eslint . --fix",
-		"dev": "nodemon --exec vite-node simulate.ts",
-		"start": "vite-node simulate.ts"
+		"dev": "nodemon --exec vite-node index.ts",
+		"start": "vite-node index.ts"
 	}
 }
