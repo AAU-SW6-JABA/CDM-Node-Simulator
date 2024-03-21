@@ -130,4 +130,5 @@ export type Config = z.infer<typeof ZodConfig>;
 /**
  * Define a full config for the simulator.
  */
-export const defineConfig = ZodConfig.parse;
+export const defineConfig =
+	ZodConfig.parse; /* eslint-disable-line @typescript-eslint/unbound-method */

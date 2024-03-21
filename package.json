@@ -1,5 +1,5 @@
 {
-	"name": "Crowd-Density-Management",
+	"name": "cdm-node-simulator",
 	"version": "1.0.0",
 	"main": "index.js",
 	"type": "module",
@@ -14,14 +14,18 @@
 		"zod": "^3.22.4"
 	},
 	"devDependencies": {
+		"@types/eslint__js": "^8.42.3",
+		"eslint": "^8.57.0",
 		"nodemon": "^3.1.0",
 		"prettier": "^3.2.5",
-		"typescript": "^5.4.2"
+		"typescript": "^5.4.3",
+		"typescript-eslint": "^7.3.1"
 	},
 	"scripts": {
 		"setup:proto-types": "yarn run proto-loader-gen-types --grpcLib=@grpc/grpc-js --outDir=gen/protobuf CDM-ProtocolBuffer/cdm_protobuf.proto",
 		"setup": "yarn setup:proto-types",
 		"format": "prettier -w .",
+		"lint": "eslint . --fix",
 		"dev": "nodemon --exec vite-node simulate.ts",
 		"start": "vite-node simulate.ts"
 	}

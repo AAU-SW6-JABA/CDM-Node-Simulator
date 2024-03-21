@@ -2,11 +2,12 @@ import type {
 	AntennaConfig,
 	PersonConfig,
 	Position,
-} from "./lib/configMeta.js";
-import config from "./config.js";
-import { randomize } from "./lib/randomDistribution.js";
+} from "./lib/configMeta.ts";
+import config from "./config.ts";
+import { randomize } from "./lib/randomDistribution.ts";
 
-import type { ProtoGrpcType } from "./gen/protobuf/cdm_protobuf.js";
+import type { ProtoGrpcType } from "./gen/protobuf/cdm_protobuf.ts";
+import type { RoutesClient } from "./gen/protobuf/cdm_protobuf/Routes.ts";
 import protoLoader from "@grpc/proto-loader";
 import grpc from "@grpc/grpc-js";
 
@@ -19,11 +20,15 @@ if (typeof process.env?.PORT !== "string") {
 
 const protoDefinitionPath = "./CDM-ProtocolBuffer/cdm_protobuf.proto";
 
-const packageDefinition = await protoLoader.load(protoDefinitionPath, {});
-const packageObject = (
+const packageDefinition: protoLoader.PackageDefinition = await protoLoader.load(
+	protoDefinitionPath,
+	{},
+);
+const packageObject: ProtoGrpcType["cdm_protobuf"] = (
 	grpc.loadPackageDefinition(packageDefinition) as unknown as ProtoGrpcType
 ).cdm_protobuf;
-const client = new packageObject.Routes(
+/* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
+const client: RoutesClient = new packageObject.Routes(
 	`localhost:${process.env.PORT}`,
 	grpc.credentials.createInsecure(),
 );
@@ -43,7 +48,7 @@ type Antenna = AntennaConfig & {
 	id: number | undefined;
 };
 
-const antennas: Antenna[] = structuredClone(config.antennas);
+const antennas: Antenna[] = structuredClone(config.antennas) as Antenna[];
 
 for (const antenna of antennas) {
 	registerAntenna(antenna);
@@ -87,7 +92,8 @@ function tick() {
 			const distance = getDistance(person.position, antenna.position);
 			if (!inRange(distance)) continue;
 			setTimeout(
-				async (antenna) => {
+				/* eslint-disable-next-line @typescript-eslint/no-misused-promises */
+				async (antenna: { id: number }) => {
 					reportLog(
 						await hashContent(person.imsi),
 						antenna.id,
