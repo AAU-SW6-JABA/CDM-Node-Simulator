@@ -1,4 +1,4 @@
-import { Randomizer } from "./configMeta.js";
+import { Randomizer } from "./configMeta.ts";
 
 /**
  * Generates a random number between 0-1 that follows a bell curve distribution.

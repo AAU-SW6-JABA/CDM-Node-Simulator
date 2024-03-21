@@ -1,4 +1,4 @@
-import { defineConfig } from "./lib/configMeta.js";
+import { defineConfig } from "./lib/configMeta.ts";
 
 export default defineConfig({
 	antennas: [
