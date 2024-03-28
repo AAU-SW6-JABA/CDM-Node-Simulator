@@ -2,15 +2,15 @@
  * This is useful for testing exactly what value you want to use in the randomizers.
  *
  * You can run this with:
- * deno run dev/test-distribution-curve.ts ALPHA
- * 
+ * yarn vite-node dev/test-distribution-curve.ts ALPHA
+ *
  * Where ALPHA is the number that defines the shape of the distribution curve.
  * It should be something between 0.01 to 100, the most interesting range is 1 to 10.
  */
 
 import { randomDistribution } from "../lib/randomDistribution.ts";
 
-const alphaCurve = parseFloat(Deno.args[0]);
+const alphaCurve = parseFloat(process.argv[2]);
 
 if (Number.isNaN(alphaCurve) || alphaCurve <= 0) {
 	throw new TypeError(
@@ -24,8 +24,8 @@ for (let i = 0; i < 100000; i++) {
 	const r = randomDistribution(alphaCurve);
 	const n = r > 0 ? Math.floor(r) : Math.ceil(r);
 	if (n === 0) {
-		results[4] += .5;
-		results[5] += .5;
+		results[4] += 0.5;
+		results[5] += 0.5;
 	} else {
 		results[n + 5] += 1;
 	}
