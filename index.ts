@@ -14,6 +14,9 @@ import grpc from "@grpc/grpc-js";
 import dotenv from "dotenv";
 
 dotenv.config();
+if (typeof process.env?.HOST !== "string") {
+	throw new TypeError("Please define a host address in your env file (HOST)");
+}
 if (typeof process.env?.PORT !== "string") {
 	throw new TypeError("Please define a port in your env file (PORT)");
 }
@@ -27,9 +30,12 @@ const packageDefinition: protoLoader.PackageDefinition = await protoLoader.load(
 const packageObject: ProtoGrpcType["cdm_protobuf"] = (
 	grpc.loadPackageDefinition(packageDefinition) as unknown as ProtoGrpcType
 ).cdm_protobuf;
+
+const url = `${process.env.HOST}:${process.env.PORT}`;
+console.log(`Connecting to CDM-Server at ${url}`);
 /* eslint-disable-next-line  @typescript-eslint/no-unsafe-assignment */
 const client: RoutesClient = new packageObject.Routes(
-	`localhost:${process.env.PORT}`,
+	url,
 	grpc.credentials.createInsecure(),
 );
 
