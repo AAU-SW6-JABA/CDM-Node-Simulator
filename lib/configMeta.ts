@@ -96,6 +96,24 @@ const ZodPollConfig = z.object({
 
 export type PollConfig = z.infer<typeof ZodPollConfig>;
 
+const ZodAntennaCalibrationConfig = z.object({
+	/**
+	 * The signal strength measurement at the first distance
+	 */
+	distance_0: ZodNumber.positive(),
+	strength_0: ZodNumber.negative(),
+
+	/**
+	 * The signal strength measurement at the second distance
+	 */
+	distance_1: ZodNumber.positive(),
+	strength_1: ZodNumber.negative(),
+});
+
+export type AntennaCalibrationConfig = z.infer<
+	typeof ZodAntennaCalibrationConfig
+>;
+
 /**
  * The full configuration of the simulator.
  */
@@ -110,6 +128,11 @@ const ZodConfig = z.object({
 	 * At the max range, the antenna will report -90dBm signal strength.
 	 */
 	maxRange: ZodNumber.positive().optional().default(1000),
+
+	/**
+	 * The antenna configuration that is used to estimate the relation between distance and signal strength
+	 */
+	antennaCalibration: ZodAntennaCalibrationConfig.required(),
 
 	/**
 	 * A list of antennas to simulate.

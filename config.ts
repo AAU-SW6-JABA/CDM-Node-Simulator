@@ -1,6 +1,12 @@
 import { defineConfig } from "./lib/configMeta.ts";
 
 export default defineConfig({
+	antennaCalibration: {
+		distance_0: 5.0,
+		strength_0: -22.0,
+		distance_1: 15.0,
+		strength_1: -38.0,
+	},
 	antennas: [
 		{
 			position: [10, 10],
