@@ -1,6 +1,5 @@
 import type { Position } from "./configMeta.ts";
 import config from "../config.ts";
-import { log10 } from "mathjs";
 
 class Calculation {
 	/**
@@ -45,7 +44,7 @@ class Calculation {
 	distanceToSignalStrength(distance: number): number {
 		return (
 			this.strength_0 -
-			10 * this.pathLossExponent * log10(distance / this.distance_0)
+			10 * this.pathLossExponent * Math.log10(distance / this.distance_0)
 		);
 	}
 
@@ -62,7 +61,7 @@ class Calculation {
 	calculatePathLossExponent(): number {
 		return (
 			(this.strength_0 - this.strength_1) /
-			(10 * log10(this.distance_1 / this.distance_0))
+			(10 * Math.log10(this.distance_1 / this.distance_0))
 		);
 	}
 }
