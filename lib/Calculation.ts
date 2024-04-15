@@ -40,7 +40,7 @@ class Calculation {
 	}
 
 	/**
-	 * Converts a distance in metres to a signal strength in dBm.
+	 * Converts a distance in meters to a signal strength in dBm.
 	 */
 	distanceToSignalStrength(distance: number): number {
 		return (

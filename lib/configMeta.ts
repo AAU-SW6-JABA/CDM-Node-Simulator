@@ -6,7 +6,7 @@ const ZodRandomizer = z.object({
 	/**
 	 * By how many percent can the output value deviate from the input value?
 	 */
-	maxDeviance: ZodNumber.optional().default(15),
+	maxDeviance: ZodNumber.optional().default(10),
 
 	/**
 	 * Defines the normal distribution of deviations in the measurements.
@@ -16,7 +16,7 @@ const ZodRandomizer = z.object({
 	 *
 	 * You can play with the curve here: https://www.desmos.com/calculator/jxzs8fz9qr
 	 */
-	curveAlpha: ZodNumber.optional().default(4),
+	curveAlpha: ZodNumber.optional().default(0.5),
 });
 
 export type Randomizer = z.infer<typeof ZodRandomizer>;
@@ -58,7 +58,7 @@ const ZodPersonConfig = z.object({
 	/**
 	 * Set settings for randomization of the signal strength.
 	 */
-	signalStrength: ZodRandomizer.optional().default({}),
+	signalStrengthProperties: ZodRandomizer.optional().default({}),
 
 	/**
 	 * The starting position of the person.

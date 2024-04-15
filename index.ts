@@ -101,7 +101,7 @@ function tick() {
 						antenna.id,
 						randomize(
 							calc.distanceToSignalStrength(distance),
-							person.signalStrength,
+							person.signalStrengthProperties,
 						),
 					);
 				},
