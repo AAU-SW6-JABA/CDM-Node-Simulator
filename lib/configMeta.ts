@@ -96,18 +96,26 @@ const ZodPollConfig = z.object({
 
 export type PollConfig = z.infer<typeof ZodPollConfig>;
 
+const ZodAntennaMeasurement = z.object({
+	/**
+	 * The signal strength measurement at the distance
+	 */
+	distance: ZodNumber.positive(),
+	strength: ZodNumber.negative(),
+});
+
+export type antennaMeasurement = z.infer<typeof ZodAntennaMeasurement>;
+
 const ZodAntennaCalibrationConfig = z.object({
 	/**
-	 * The signal strength measurement at the first distance
+	 * The signal strength measurements at the first distance
 	 */
-	distance_0: ZodNumber.positive(),
-	strength_0: ZodNumber.negative(),
+	first: ZodAntennaMeasurement,
 
 	/**
-	 * The signal strength measurement at the second distance
+	 * The signal strength measurements at the second distance
 	 */
-	distance_1: ZodNumber.positive(),
-	strength_1: ZodNumber.negative(),
+	second: ZodAntennaMeasurement,
 });
 
 export type AntennaCalibrationConfig = z.infer<

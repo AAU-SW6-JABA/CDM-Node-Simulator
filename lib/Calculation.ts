@@ -8,10 +8,10 @@ class Calculation {
 	 */
 	maxDBM = -90;
 
-	distance_0 = config.antennaCalibration.distance_0;
-	distance_1 = config.antennaCalibration.distance_1;
-	strength_0 = config.antennaCalibration.strength_0;
-	strength_1 = config.antennaCalibration.strength_1;
+	firstDistance = config.antennaCalibration.first.distance;
+	secondDistance = config.antennaCalibration.second.distance;
+	firstStrength = config.antennaCalibration.first.strength;
+	secondStrength = config.antennaCalibration.second.strength;
 
 	pathLossExponent: number;
 
@@ -43,8 +43,10 @@ class Calculation {
 	 */
 	distanceToSignalStrength(distance: number): number {
 		return (
-			this.strength_0 -
-			10 * this.pathLossExponent * Math.log10(distance / this.distance_0)
+			this.firstStrength -
+			10 *
+				this.pathLossExponent *
+				Math.log10(distance / this.firstDistance)
 		);
 	}
 
@@ -60,8 +62,8 @@ class Calculation {
 	 */
 	calculatePathLossExponent(): number {
 		return (
-			(this.strength_0 - this.strength_1) /
-			(10 * Math.log10(this.distance_1 / this.distance_0))
+			(this.firstStrength - this.secondStrength) /
+			(10 * Math.log10(this.secondDistance / this.firstDistance))
 		);
 	}
 }
