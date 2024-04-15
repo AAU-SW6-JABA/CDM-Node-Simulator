@@ -1,10 +1,7 @@
-import type {
-	AntennaConfig,
-	PersonConfig,
-	Position,
-} from "./lib/configMeta.ts";
+import type { AntennaConfig, PersonConfig } from "./lib/configMeta.ts";
 import config from "./config.ts";
 import { randomize } from "./lib/randomDistribution.ts";
+import calc from "./lib/Calculation.ts";
 
 import type { ProtoGrpcType } from "./gen/protobuf/cdm_protobuf.ts";
 import type { RoutesClient } from "./gen/protobuf/cdm_protobuf/Routes.ts";
@@ -38,12 +35,6 @@ const client: RoutesClient = new packageObject.Routes(
 	url,
 	grpc.credentials.createInsecure(),
 );
-
-/**
- * The maximum dBm that any antenna can output.
- * Randomization means the output value might be higher.
- */
-const maxDBM = -90;
 
 const persons: PersonConfig[] = structuredClone(config.persons);
 
@@ -87,7 +78,7 @@ function tick() {
 	for (const person of persons) {
 		const deltaTime = config.poll.interval / 1000; //Time is in meter pr second.
 		// Move the person
-		const deltaPosition = directionToXY(
+		const deltaPosition = calc.directionToXY(
 			person.direction.bearing,
 			person.direction.speed * deltaTime, //speed in m/s times poll update in seconds.
 		);
@@ -97,8 +88,11 @@ function tick() {
 		// Log the person's position on all antennas in range
 		for (const antenna of antennas) {
 			if (!antenna.id) continue;
-			const distance = getDistance(person.position, antenna.position);
-			if (!inRange(distance)) continue;
+			const distance = calc.getDistance(
+				person.position,
+				antenna.position,
+			);
+			if (!calc.inRange(distance)) continue;
 			setTimeout(
 				/* eslint-disable-next-line @typescript-eslint/no-misused-promises */
 				async (antenna: { id: number }) => {
@@ -106,8 +100,8 @@ function tick() {
 						await hashContent(person.imsi),
 						antenna.id,
 						randomize(
-							distanceToSignalStrength(distance),
-							person.signalStrength,
+							calc.distanceToSignalStrength(distance),
+							person.signalStrengthProperties,
 						),
 					);
 				},
@@ -117,32 +111,6 @@ function tick() {
 		}
 	}
 	setTimeout(tick, config.poll.interval);
-}
-
-/**
- * Reads a distance with a specific bearing and turns it into an x-distance and y-distance that matches the original distance.
- */
-function directionToXY(bearing: number, distance: number): Position {
-	const angleInRadians = (bearing * Math.PI) / 180;
-	const deltaX = distance * Math.cos(angleInRadians);
-	const deltaY = distance * Math.sin(angleInRadians);
-	return [deltaX, deltaY];
-}
-
-/**
- * Converts a distance in metres to a signal strength in dBm.
- *
- * TODO: Make sure this conversion is correct. I could not find theoretical evidence that dBm translates linearly to distance.
- */
-function distanceToSignalStrength(distance: number): number {
-	return (distance / config.maxRange) * maxDBM;
-}
-
-/**
- * Check to see if a distance is outside the configured maximum range of an antenna.
- */
-function inRange(distance: number): boolean {
-	return distanceToSignalStrength(distance) >= maxDBM;
 }
 
 /**
@@ -159,15 +127,6 @@ async function hashContent(content: string | number): Promise<string> {
 		.map((b) => b.toString(16).padStart(2, "0"))
 		.join("");
 	return hashHex;
-}
-
-/**
- * Get the absolute distance between two 2D points.
- */
-function getDistance(pos1: Position, pos2: Position): number {
-	const dx = pos1[0] - pos2[0];
-	const dy = pos1[1] - pos2[1];
-	return Math.sqrt(dx ** 2 + dy ** 2);
 }
 
 /**

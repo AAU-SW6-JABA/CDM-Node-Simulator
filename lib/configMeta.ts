@@ -6,7 +6,7 @@ const ZodRandomizer = z.object({
 	/**
 	 * By how many percent can the output value deviate from the input value?
 	 */
-	maxDeviance: ZodNumber.optional().default(15),
+	maxDeviance: ZodNumber.optional().default(10),
 
 	/**
 	 * Defines the normal distribution of deviations in the measurements.
@@ -16,7 +16,7 @@ const ZodRandomizer = z.object({
 	 *
 	 * You can play with the curve here: https://www.desmos.com/calculator/jxzs8fz9qr
 	 */
-	curveAlpha: ZodNumber.optional().default(4),
+	curveAlpha: ZodNumber.optional().default(0.5),
 });
 
 export type Randomizer = z.infer<typeof ZodRandomizer>;
@@ -58,7 +58,7 @@ const ZodPersonConfig = z.object({
 	/**
 	 * Set settings for randomization of the signal strength.
 	 */
-	signalStrength: ZodRandomizer.optional().default({}),
+	signalStrengthProperties: ZodRandomizer.optional().default({}),
 
 	/**
 	 * The starting position of the person.
@@ -96,6 +96,32 @@ const ZodPollConfig = z.object({
 
 export type PollConfig = z.infer<typeof ZodPollConfig>;
 
+const ZodAntennaMeasurement = z.object({
+	/**
+	 * The signal strength measurement at the distance
+	 */
+	distance: ZodNumber.positive(),
+	strength: ZodNumber.negative(),
+});
+
+export type antennaMeasurement = z.infer<typeof ZodAntennaMeasurement>;
+
+const ZodAntennaCalibrationConfig = z.object({
+	/**
+	 * The signal strength measurements at the first distance
+	 */
+	first: ZodAntennaMeasurement,
+
+	/**
+	 * The signal strength measurements at the second distance
+	 */
+	second: ZodAntennaMeasurement,
+});
+
+export type AntennaCalibrationConfig = z.infer<
+	typeof ZodAntennaCalibrationConfig
+>;
+
 /**
  * The full configuration of the simulator.
  */
@@ -110,6 +136,11 @@ const ZodConfig = z.object({
 	 * At the max range, the antenna will report -90dBm signal strength.
 	 */
 	maxRange: ZodNumber.positive().optional().default(1000),
+
+	/**
+	 * The antenna configuration that is used to estimate the relation between distance and signal strength
+	 */
+	antennaCalibration: ZodAntennaCalibrationConfig.required(),
 
 	/**
 	 * A list of antennas to simulate.
