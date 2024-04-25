@@ -103,10 +103,7 @@ function tick() {
 					reportLog(
 						await hashContent(person.imsi),
 						antenna.id,
-						randomize(
-							calc.distanceToSignalStrength(distance),
-							person.signalStrengthProperties,
-						),
+						calc.distanceToSignalStrength(distance), // randomize(calc.distanceToSignalStrength(distance), person.signalStrengthProperties)
 					);
 				},
 				randomize(config.poll.interval / 2, config.poll.deviance),
