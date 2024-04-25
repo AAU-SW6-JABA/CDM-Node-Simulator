@@ -44,9 +44,7 @@ class Calculation {
 	distanceToSignalStrength(distance: number): number {
 		return (
 			this.firstStrength -
-			10 *
-				this.pathLossExponent *
-				Math.log10(distance / this.firstDistance)
+			10 * this.pathLossExponent * Math.log(distance / this.firstDistance)
 		);
 	}
 
@@ -63,7 +61,7 @@ class Calculation {
 	calculatePathLossExponent(): number {
 		return (
 			(this.firstStrength - this.secondStrength) /
-			(10 * Math.log10(this.secondDistance / this.firstDistance))
+			(10 * Math.log(this.secondDistance / this.firstDistance))
 		);
 	}
 }
