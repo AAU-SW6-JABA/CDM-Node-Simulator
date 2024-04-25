@@ -3,35 +3,35 @@ import { defineConfig } from "./lib/configMeta.ts";
 export default defineConfig({
 	antennaCalibration: {
 		first: {
-			distance: 5.0,
-			strength: -22.0,
+			distance: 1.0,
+			strength: -20.0,
 		},
 		second: {
-			distance: 15.0,
-			strength: -38.0,
+			distance: 10.0,
+			strength: -70.0,
 		},
 	},
 	antennas: [
 		{
+			position: [0, 0],
+		},
+		{
+			position: [0, 10],
+		},
+		{
+			position: [10, 0],
+		},
+		{
 			position: [10, 10],
-		},
-		{
-			position: [0, -10],
-		},
-		{
-			position: [20, 20],
-		},
-		{
-			position: [-10, 40],
 		},
 	],
 	persons: [
 		{
 			direction: {
-				bearing: 270,
-				speed: 1, // Meters pr. Second.
+				bearing: -135,
+				speed: 0.75, // Meters pr. Second.
 			},
-			position: [0, 150],
+			position: [-5, -5],
 		},
 	],
 });

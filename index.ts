@@ -79,11 +79,13 @@ function tick() {
 		const deltaTime = config.poll.interval / 1000; //Time is in meter pr second.
 		// Move the person
 		const deltaPosition = calc.directionToXY(
-			person.direction.bearing,
+			person.direction.bearing % 360,
 			person.direction.speed * deltaTime, //speed in m/s times poll update in seconds.
 		);
 		person.position[0] += deltaPosition[0];
 		person.position[1] += deltaPosition[1];
+
+		let personWithinRange = false; // If the person is within range of any antenna.
 
 		// Log the person's position on all antennas in range
 		for (const antenna of antennas) {
@@ -93,6 +95,8 @@ function tick() {
 				antenna.position,
 			);
 			if (!calc.inRange(distance)) continue;
+			personWithinRange = true;
+
 			setTimeout(
 				/* eslint-disable-next-line @typescript-eslint/no-misused-promises */
 				async (antenna: { id: number }) => {
@@ -108,6 +112,10 @@ function tick() {
 				randomize(config.poll.interval / 2, config.poll.deviance),
 				antenna,
 			);
+		}
+
+		if (personWithinRange === false) {
+			person.direction.bearing += 180; // Turn around if person is out of range.
 		}
 	}
 	setTimeout(tick, config.poll.interval);
