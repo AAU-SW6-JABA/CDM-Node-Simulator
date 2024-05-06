@@ -1,4 +1,4 @@
-import { defineConfig } from "./lib/configMeta.ts";
+import { antennaGrid, defineConfig, personGrid } from "./lib/configMeta.ts";
 
 export default defineConfig({
 	antennaCalibration: {
@@ -12,26 +12,25 @@ export default defineConfig({
 		},
 	},
 	antennas: [
-		{
-			position: [0, 0],
-		},
-		{
-			position: [0, 10],
-		},
-		{
-			position: [10, 0],
-		},
-		{
-			position: [10, 10],
-		},
+		...antennaGrid({
+			cornerPosition: [0, 0],
+			rows: 2,
+			columns: 2,
+			verticalSpacing: 20,
+			horizontalSpacing: 20,
+		}),
 	],
 	persons: [
-		{
+		...personGrid({
+			cornerPosition: [2, 3],
+			rows: 2,
+			columns: 2,
+			verticalSpacing: 5,
+			horizontalSpacing: 5,
 			direction: {
-				bearing: -135,
-				speed: 0.75, // Meters pr. Second.
+				bearing: 70,
+				speed: 0.2,
 			},
-			position: [-5, -5],
-		},
+		}),
 	],
 });

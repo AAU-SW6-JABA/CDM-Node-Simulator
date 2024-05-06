@@ -163,3 +163,111 @@ export type Config = z.infer<typeof ZodConfig>;
  */
 export const defineConfig =
 	ZodConfig.parse; /* eslint-disable-line @typescript-eslint/unbound-method */
+
+const ZodPersonGridConfig = z.object({
+	/**
+	 * The top right corner of the grid.
+	 */
+	cornerPosition: ZodPosition,
+
+	/**
+	 * The number of vertical rows of persons.
+	 */
+	rows: ZodNumber,
+
+	/**
+	 * The number of horizontal columns of persons.
+	 */
+	columns: ZodNumber,
+
+	/**
+	 * The vartical spacing in metres between each person.
+	 */
+	verticalSpacing: ZodNumber,
+
+	/**
+	 * The horizontal spacing in metrees between each person.
+	 */
+	horizontalSpacing: ZodNumber,
+
+	/**
+	 * Define where the person is moving to.
+	 */
+	direction: ZodDirection.optional().default({}),
+
+	/**
+	 * Set settings for randomization of the signal strength.
+	 */
+	signalStrengthProperties: ZodRandomizer.optional().default({}),
+});
+
+export type PersonGridConfig = z.infer<typeof ZodPersonGridConfig>;
+
+export const personGrid = (data?: unknown): PersonConfig[] => {
+	const config = ZodPersonGridConfig.parse(data);
+	const persons: PersonConfig[] = [];
+	for (let col = 0; col < config.columns; col++) {
+		for (let row = 0; row < config.rows; row++) {
+			persons.push(
+				ZodPersonConfig.parse({
+					position: [
+						config.cornerPosition[0] +
+							col * config.horizontalSpacing,
+						config.cornerPosition[1] + row * config.verticalSpacing,
+					],
+					direction: config.direction,
+					signalStrengthProperties: config.signalStrengthProperties,
+				}),
+			);
+		}
+	}
+	return persons;
+};
+
+const ZodAntennaGridConfig = z.object({
+	/**
+	 * The top right corner of the grid.
+	 */
+	cornerPosition: ZodPosition,
+
+	/**
+	 * The number of vertical rows of antennas.
+	 */
+	rows: ZodNumber,
+
+	/**
+	 * The number of horizontal columns of antennas.
+	 */
+	columns: ZodNumber,
+
+	/**
+	 * The vartical spacing in metres between each antenna.
+	 */
+	verticalSpacing: ZodNumber,
+
+	/**
+	 * The horizontal spacing in metrees between each antenna.
+	 */
+	horizontalSpacing: ZodNumber,
+});
+
+export type AntennaGridConfig = z.infer<typeof ZodAntennaGridConfig>;
+
+export const antennaGrid = (data?: unknown): AntennaConfig[] => {
+	const config = ZodAntennaGridConfig.parse(data);
+	const antennas: AntennaConfig[] = [];
+	for (let col = 0; col < config.columns; col++) {
+		for (let row = 0; row < config.rows; row++) {
+			antennas.push(
+				ZodAntennaConfig.parse({
+					position: [
+						config.cornerPosition[0] +
+							col * config.horizontalSpacing,
+						config.cornerPosition[1] + row * config.verticalSpacing,
+					],
+				}),
+			);
+		}
+	}
+	return antennas;
+};
