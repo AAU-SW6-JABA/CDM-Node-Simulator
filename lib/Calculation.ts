@@ -42,10 +42,16 @@ class Calculation {
 	 * Converts a distance in meters to a signal strength in dBm.
 	 */
 	distanceToSignalStrength(distance: number): number {
-		return (
+		const capAt = -1;
+		let signalStrength = (
 			this.firstStrength -
 			10 * this.pathLossExponent * Math.log(distance / this.firstDistance)
 		);
+		if(signalStrength > capAt){
+			console.warn(`Capped signal strength from ${signalStrength} to ${capAt}`);
+			signalStrength = capAt;
+		}
+		return signalStrength;
 	}
 
 	/**
