@@ -203,6 +203,9 @@ const ZodPersonGridConfig = z.object({
 
 export type PersonGridConfig = z.infer<typeof ZodPersonGridConfig>;
 
+/**
+ * Creates a grid of persons.
+ */
 export const personGrid = (data?: unknown): PersonConfig[] => {
 	const config = ZodPersonGridConfig.parse(data);
 	const persons: PersonConfig[] = [];
@@ -253,6 +256,9 @@ const ZodAntennaGridConfig = z.object({
 
 export type AntennaGridConfig = z.infer<typeof ZodAntennaGridConfig>;
 
+/**
+ * Creates a grid of antennas.
+ */
 export const antennaGrid = (data?: unknown): AntennaConfig[] => {
 	const config = ZodAntennaGridConfig.parse(data);
 	const antennas: AntennaConfig[] = [];
