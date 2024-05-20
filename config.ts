@@ -22,14 +22,14 @@ export default defineConfig({
 	],
 	persons: [
 		...personGrid({
-			cornerPosition: [2, 3],
+			cornerPosition: [5, 5],
 			rows: 2,
 			columns: 2,
-			verticalSpacing: 5,
-			horizontalSpacing: 5,
+			verticalSpacing: 10,
+			horizontalSpacing: 10,
 			direction: {
 				bearing: 70,
-				speed: 0.2,
+				speed: 0,
 			},
 		}),
 	],
